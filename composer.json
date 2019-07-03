@@ -1,0 +1,8 @@
+{
+    "name": "y/only-love-you",
+    "description": "お前しか好きじゃない",
+    "type": "project",
+    "require": {
+        "team-reflex/discord-php": "^4.0"
+    }
+}
