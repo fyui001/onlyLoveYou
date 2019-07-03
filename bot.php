@@ -12,7 +12,7 @@ $discord->on('ready', function ($discord) {
 
     $discord->on('message', function ($message) {
 
-        if ( strpos($message->content, 'しか好きじゃない') || strpos($message->content, 'しかすきじゃない') ) {
+        if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $message->content) ) {
             $db = new main;
             $usr = $message->author->user->username;
             $messageContent = $message->content;
