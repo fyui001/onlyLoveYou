@@ -35,7 +35,7 @@ class main
 
             try {
                 $db = $this->getDb();
-                $tableName = 'onlyLoveYou';
+                $tableName = 'only_love_you';
                 $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}') ";
                 echo "{$sql}\n";
                 $stt = $db->prepare($sql);
