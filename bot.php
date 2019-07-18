@@ -12,11 +12,19 @@ $discord->on('ready', function ($discord) {
 
     $discord->on('message', function ($message) {
 
-        if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $message->content) ) {
-            $db = new main;
-            $usr = $message->author->user->username;
-            $messageContent = $message->content;
+        $usr = $message->author->user->username;
+        $messageContent = $message->content;
+
+        if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $messageContent) ) {
+
+            $db = new OnlyLoveYou;
             $db->create($usr, $messageContent);
+
+        } elseif ( preg_match('/(おれ|俺)の/', $messageContent) ) {
+
+            $VoiceActorOwnership = new VoiceActorOwnership;
+            $VoiceActorOwnership->create($usr, $messageContent);
+
         }
 
     });

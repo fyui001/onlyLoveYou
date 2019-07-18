@@ -23,32 +23,6 @@ class main
     }
 
     /**
-     * 送信者とメッセージ内容と解析した名前をデータベースに追加する
-     *
-     * @param $usr
-     * @param $msgContent
-     * @return bool
-     */
-    public function create($usr, $msgContent) {
-
-        if ( $seiyuName = $this->seiyuNameAnalysis($msgContent)) {
-
-            try {
-                $db = $this->getDb();
-                $tableName = 'only_love_you';
-                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}') ";
-                echo "{$sql}\n";
-                $stt = $db->prepare($sql);
-                $stt->execute();
-                return true;
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
-
-        }
-    }
-
-    /**
      * 形態素解析で声優の名前を解析
      *
      * @param $input
@@ -65,4 +39,62 @@ class main
         return $result;
     }
 
+}
+
+class OnlyLoveYou extends main
+{
+    /**
+     * 送信者とメッセージ内容と解析した名前をデータベースに追加する
+     *
+     * @param $usr
+     * @param $msgContent
+     * @return bool
+     */
+    public function create($usr, $msgContent) {
+
+        if ( $seiyuName = $this->seiyuNameAnalysis($msgContent)) {
+
+            try {
+                $db = $this->getDb();
+                $tableName = 'only_love_you';
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}') ";
+                $stt = $db->prepare($sql);
+                $stt->execute();
+                return true;
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
+
+        }
+    }
+
+}
+
+class VoiceActorOwnership extends main
+{
+    /**
+     *
+     *
+     * @param $usr
+     * @param $msgContent
+     * @return bool|void
+     */
+    public function create($usr, $msgContent) {
+
+        if ( $voiceActorName = $this->seiyuNameAnalysis($msgContent) ) {
+
+            try {
+                $db = $this->getDb();
+                $tableName = 'voice_actor_ownership';
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership) VALUES ('{$usr}', '{$msgContent}', '{$voiceActorName}' )";
+                $stt = $db->prepare($sql);
+                $stt->execute();
+                return true;
+            } catch(PDOException $e) {
+                die($e->getMessage());
+            }
+
+        }
+
+    }
 }
