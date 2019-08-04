@@ -20,7 +20,7 @@ $discord->on('ready', function ($discord) {
             $db = new OnlyLoveYou;
             $db->create($usr, $messageContent);
 
-        } elseif ( preg_match('/(おれ|俺)の/', $messageContent) ) {
+        } elseif ( preg_match('/(おれ|俺|お！れ！)の/', $messageContent) ) {
 
             $VoiceActorOwnership = new VoiceActorOwnership;
             $VoiceActorOwnership->create($usr, $messageContent);
