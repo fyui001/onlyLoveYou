@@ -33,7 +33,8 @@ class main
         $options = ['-d', '/usr/lib64/mecab/dic/mecab-ipadic-neologd/'];
         $mt = new MeCab\Tagger($options);
         $result = '';
-        for ($node = $mt->parseToNode($input); $node; $node = $node->getNext()) {
+
+        for ( $node = $mt->parseToNode($input); $node; $node = $node->getNext() ) {
             $result .= $node->getStat() != 2 && $node->getStat() != 3 && mb_strpos($node->getFeature(), '人名') ? $node->getSurface() : false;
         }
         return $result;
@@ -52,20 +53,24 @@ class OnlyLoveYou extends main
      */
     public function create($usr, $msgContent) {
 
-        if ( $seiyuName = $this->seiyuNameAnalysis($msgContent)) {
+        if ( $seiyuName = $this->seiyuNameAnalysis($msgContent) ) {
 
             try {
+
                 $db = $this->getDb();
                 $tableName = 'only_love_you';
                 $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}') ";
+
                 $stt = $db->prepare($sql);
                 $stt->execute();
                 return true;
+
             } catch (Exception $e) {
                 die($e->getMessage());
             }
 
         }
+
     }
 
 }
@@ -87,14 +92,16 @@ class VoiceActorOwnership extends main
                 $db = $this->getDb();
                 $tableName = 'voice_actor_ownership';
                 $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership) VALUES ('{$usr}', '{$msgContent}', '{$voiceActorName}' )";
+
                 $stt = $db->prepare($sql);
                 $stt->execute();
                 return true;
+
             } catch(PDOException $e) {
                 die($e->getMessage());
             }
-
         }
 
     }
+
 }
