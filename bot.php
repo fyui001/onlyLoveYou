@@ -8,27 +8,26 @@ $discord = new \Discord\Discord([
 ]);
 
 $discord->on('ready', function ($discord) {
-    echo "Bot is ready.", PHP_EOL;
 
     $discord->on('message', function ($message) {
 
         $usr = $message->author->user->username;
         $messageContent = $message->content;
+        $guildName = $message->channel->guild->name;
 
         if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $messageContent) ) {
 
             $db = new OnlyLoveYou;
-            $db->create($usr, $messageContent);
+            $db->create($usr, $messageContent, $guildName);
 
         } elseif ( preg_match('/(おれ|俺|お！れ！)の/', $messageContent) ) {
 
             $VoiceActorOwnership = new VoiceActorOwnership;
-            $VoiceActorOwnership->create($usr, $messageContent);
+            $VoiceActorOwnership->create($usr, $messageContent, $guildName);
 
         }
 
     });
 });
-
 
 $discord->run();

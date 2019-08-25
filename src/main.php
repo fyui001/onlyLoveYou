@@ -51,7 +51,7 @@ class OnlyLoveYou extends main
      * @param $msgContent
      * @return bool
      */
-    public function create($usr, $msgContent) {
+    public function create($usr, $msgContent, $guildName) {
 
         if ( $seiyuName = $this->seiyuNameAnalysis($msgContent) ) {
 
@@ -59,14 +59,15 @@ class OnlyLoveYou extends main
 
                 $db = $this->getDb();
                 $tableName = 'only_love_you';
-                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}') ";
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love, Guild) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}', '{$guildName}') ";
 
                 $stt = $db->prepare($sql);
                 $stt->execute();
                 return true;
 
             } catch (Exception $e) {
-                die($e->getMessage());
+                $db->rollBack();
+                die( $e->getMessage() );
             }
 
         }
@@ -84,21 +85,22 @@ class VoiceActorOwnership extends main
      * @param $msgContent
      * @return bool|void
      */
-    public function create($usr, $msgContent) {
+    public function create($usr, $msgContent, $guildName) {
 
         if ( $voiceActorName = $this->seiyuNameAnalysis($msgContent) ) {
 
             try {
                 $db = $this->getDb();
                 $tableName = 'voice_actor_ownership';
-                $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership) VALUES ('{$usr}', '{$msgContent}', '{$voiceActorName}' )";
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership) VALUES ('{$usr}', '{$msgContent}', '{$voiceActorName}', '{$guildName}' )";
 
                 $stt = $db->prepare($sql);
                 $stt->execute();
                 return true;
 
             } catch(PDOException $e) {
-                die($e->getMessage());
+                $db->rollBack();
+                die( $e->getMessage() );
             }
         }
 
