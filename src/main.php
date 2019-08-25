@@ -78,7 +78,7 @@ class OnlyLoveYou extends main
 class VoiceActorOwnership extends main
 {
     /**
-     *
+     * 声優の所有権の主張を検知して解析して保存する
      *
      * @param $usr
      * @param $msgContent
