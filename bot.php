@@ -17,8 +17,8 @@ $discord->on('ready', function ($discord) {
 
         if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $messageContent) ) {
 
-            $db = new OnlyLoveYou;
-            $db->create($usr, $messageContent, $guildName);
+            $OnlyLoveYou = new OnlyLoveYou;
+            $OnlyLoveYou->create($usr, $messageContent, $guildName);
 
         } elseif ( preg_match('/(おれ|俺|お！れ！)の/', $messageContent) ) {
 
