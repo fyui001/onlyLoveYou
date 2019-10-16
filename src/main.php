@@ -51,21 +51,24 @@ class OnlyLoveYou extends main
      * @param $msgContent
      * @return bool
      */
-    public function create($usr, $msgContent, $guildName) {
+    public function create(array $request) {
 
-        if ( $seiyuName = $this->seiyuNameAnalysis($msgContent) ) {
+        if ( $this->seiyuNameAnalysis($request['msg']) ) {
 
             try {
 
+                $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
                 $db = $this->getDb();
                 $tableName = 'only_love_you';
-                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love, Guild) VALUES ('{$usr}', '{$msgContent}', '{$seiyuName}', '{$guildName}') ";
-
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, Love, Guild) VALUES (:usr, :msgContent, :seiyuName, :guildName) ";
                 $stt = $db->prepare($sql);
+                $stt->bindValue(':usr', $request['usr']);
+                $stt->bindValue(':msgContent', $request['msg']);
+                $stt->bindValue(':seiyuName', $voiceActorName);
+                $stt->bindValue(':guildName', $request['guild']);
                 $stt->execute();
-                return true;
 
-            } catch (Exception $e) {
+            } catch(PDOException $e) {
                 $db->rollBack();
                 die( $e->getMessage() );
             }
@@ -85,18 +88,22 @@ class VoiceActorOwnership extends main
      * @param $msgContent
      * @return bool|void
      */
-    public function create($usr, $msgContent, $guildName) {
+    public function create(array $request) {
 
-        if ( $voiceActorName = $this->seiyuNameAnalysis($msgContent) ) {
+        if ( $this->seiyuNameAnalysis($request['msg']) ) {
 
             try {
-                $db = $this->getDb();
-                $tableName = 'voice_actor_ownership';
-                $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership) VALUES ('{$usr}', '{$msgContent}', '{$voiceActorName}', '{$guildName}' )";
 
+                $db = $this->getDb();
+                $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
+                $tableName = 'voice_actor_ownership';
+                $sql = "INSERT INTO `{$tableName}` (UserName, Content, ClaimOwnership, Guild) VALUES (:usr, :msgContent, :voiceActorName, :guildName )";
                 $stt = $db->prepare($sql);
+                $stt->bindValue(':usr', $request['usr']);
+                $stt->bindValue(':msgContent', $request['msg']);
+                $stt->bindValue(':voiceAfctorName', $voiceActorName);
+                $stt->bindValue(':guildName', $request['guild']);
                 $stt->execute();
-                return true;
 
             } catch(PDOException $e) {
                 $db->rollBack();
