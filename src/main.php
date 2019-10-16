@@ -101,7 +101,7 @@ class VoiceActorOwnership extends main
                 $stt = $db->prepare($sql);
                 $stt->bindValue(':usr', $request['usr']);
                 $stt->bindValue(':msgContent', $request['msg']);
-                $stt->bindValue(':voiceAfctorName', $voiceActorName);
+                $stt->bindValue(':voiceActorName', $voiceActorName);
                 $stt->bindValue(':guildName', $request['guild']);
                 $stt->execute();
 
