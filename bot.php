@@ -11,19 +11,21 @@ $discord->on('ready', function ($discord) {
 
     $discord->on('message', function ($message) {
 
-        $usr = $message->author->user->username;
-        $messageContent = $message->content;
-        $guildName = $message->channel->guild->name;
+        $insertDataArr = [
+            'usr' => $message->author->user->username,
+            'msg' => $message->content,
+            'guild' => $message->channel->guild->name,
+        ];
 
-        if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $messageContent) ) {
+        if ( preg_match('/しか(好き|すき)じゃ(ねえ|ない|ねぇ)/', $insertDataArr['msg']) ) {
 
             $OnlyLoveYou = new OnlyLoveYou;
-            $OnlyLoveYou->create($usr, $messageContent, $guildName);
+            $OnlyLoveYou->create($insertDataArr);
 
-        } elseif ( preg_match('/(おれ|俺|お！れ！)の/', $messageContent) ) {
+        } elseif ( preg_match('/(おれ|俺|お！れ！)の/', $insertDataArr) ) {
 
             $VoiceActorOwnership = new VoiceActorOwnership;
-            $VoiceActorOwnership->create($usr, $messageContent, $guildName);
+            $VoiceActorOwnership->create($insertDataArr);
 
         }
 
