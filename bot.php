@@ -2,7 +2,7 @@
 require_once(__DIR__ .'/vendor/autoload.php');
 require_once(__DIR__ .'/src/main.php');
 
-$conf = parse_ini_file('./config.ini', true);
+$conf = parse_ini_file(__DIR__ . '/config.ini', true);
 
 $discord = new \Discord\Discord([
     'token' => $conf['BOT']['TOKEN'],

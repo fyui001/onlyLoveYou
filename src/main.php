@@ -8,8 +8,7 @@ class main
      */
     protected function getDb() {
 
-        $conf = parse_ini_file('../config.ini', true);
-
+        $conf = parse_ini_file(__DIR__ . '/../config.ini', true);
         try{
             $db = new PDO("mysql:dbname={$conf['DATABASE']['DB_NAME']}; host={$conf['DATABASE']['HOST']}; charset=utf8;", $conf['DATABASE']['USER'], $conf['DATABASE']['PASSWD']);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
