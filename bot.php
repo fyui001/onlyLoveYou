@@ -5,7 +5,7 @@ require_once(__DIR__ .'/src/main.php');
 $conf = parse_ini_file('./config.ini', true);
 
 $discord = new \Discord\Discord([
-    'token' => $conf=['BOT']['TOKEN'],
+    'token' => $conf['BOT']['TOKEN'],
 ]);
 
 $discord->on('ready', function ($discord) {
@@ -32,7 +32,7 @@ $discord->on('ready', function ($discord) {
 
             $OnlyYouWin = new OnlyYouWin;
             $OnlyYouWin->create($insertDataArr);
-            
+
         }
 
     });
