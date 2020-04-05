@@ -116,7 +116,7 @@ class OnlyYouWin extends main
             try {
                 $db = $this->getDb();
                 $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
-                $tableName = 'voice_actor_ownership';
+                $tableName = 'only_you_win';
                 $sql = "INSERT INTO `{$tableName}` (user, content, win, guild) VALUES (:usr, :msgContent, :voiceActorName, :guildName )";
                 $stt = $db->prepare($sql);
                 $stt->bindValue(':usr', $request['usr']);
