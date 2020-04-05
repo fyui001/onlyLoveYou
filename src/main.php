@@ -7,13 +7,11 @@ class main
      * @return PDO
      */
     protected function getDb() {
-        $user = '';
-        $passwd = '';
-        $host = '';
-        $dbName = '';
+
+        $conf = parse_ini_file('../config.ini', true);
 
         try{
-            $db = new PDO("mysql:dbname={$dbName}; host={$host}; charset=utf8;", $user, $passwd);
+            $db = new PDO("mysql:dbname={$conf['DATABASE']['DB_NAME']}; host={$conf['DATABASE']['HOST']}; charset=utf8;", $conf['DATABASE']['USER'], $conf['DATABASE']['PASSWD']);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch(PDOException $e) {
