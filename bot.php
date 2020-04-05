@@ -28,6 +28,11 @@ $discord->on('ready', function ($discord) {
             $VoiceActorOwnership = new VoiceActorOwnership;
             $VoiceActorOwnership->create($insertDataArr);
 
+        } elseif (preg_match('/しか(勝たん|かたん)/')) {
+
+            $OnlyYouWin = new OnlyYouWin;
+            $OnlyYouWin->create($insertDataArr);
+            
         }
 
     });

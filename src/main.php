@@ -107,5 +107,29 @@ class VoiceActorOwnership extends main
         }
 
     }
+}
 
+class OnlyYouWin extends main
+{
+    public function create(array $request) {
+        if ( $this->seiyuNameAnalysis($request['msg']) ) {
+
+            try {
+                $db = $this->getDb();
+                $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
+                $tableName = 'voice_actor_ownership';
+                $sql = "INSERT INTO `{$tableName}` (user, content, win, guild) VALUES (:usr, :msgContent, :voiceActorName, :guildName )";
+                $stt = $db->prepare($sql);
+                $stt->bindValue(':usr', $request['usr']);
+                $stt->bindValue(':msgContent', $request['msg']);
+                $stt->bindValue(':voiceActorName', $voiceActorName);
+                $stt->bindValue(':guildName', $request['guild']);
+                $stt->execute();
+            } catch(PDOException $e) {
+                $db->rollBack();
+                die( $e->getMessage() );
+            }
+
+        }
+    }
 }
