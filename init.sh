@@ -1,0 +1,1 @@
+docker-compose run --rm bot sh -c 'composer install'
