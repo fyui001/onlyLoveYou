@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./bot:/root/bot
+    tty: true
+    restart: always
+
