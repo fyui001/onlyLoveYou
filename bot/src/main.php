@@ -1,5 +1,6 @@
 <?php
-class main
+
+class Main
 {
     /**
      * データベース接続
@@ -9,51 +10,56 @@ class main
     protected function getDb() {
 
         $conf = parse_ini_file(__DIR__ . '/../config.ini', true);
+
         try{
-            $db = new PDO("mysql:dbname={$conf['DATABASE']['DB_NAME']}; host={$conf['DATABASE']['HOST']}; charset=utf8;", $conf['DATABASE']['USER'], $conf['DATABASE']['PASSWD']);
+            $db = new PDO("mysql:dbname={$conf['DATABASE']['DB_NAME']}; host={$conf['DATABASE']['HOST']}; charset=utf8;", $conf['DATABASE']['USER'], $conf['DATABASE']['PASSWORD']);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch(PDOException $e) {
             die("接続に失敗{$e->getMessage()}");
         }
+
         return $db;
     }
 
     /**
      * 形態素解析で声優の名前を解析
      *
-     * @param $input
+     * @param string $input
      * @return string
      */
-    public function seiyuNameAnalysis($input) {
+    public function seiyuNameAnalysis(string $input): string {
 
-        $options = ['-d', '/usr/lib64/mecab/dic/mecab-ipadic-neologd/'];
-        $mt = new MeCab\Tagger($options);
-        $result = '';
-
-        for ( $node = $mt->parseToNode($input); $node; $node = $node->getNext() ) {
-            $result .= $node->getStat() != 2 && $node->getStat() != 3 && mb_strpos($node->getFeature(), '人名') ? $node->getSurface() : false;
+        try {
+            $options = ['-d', '/usr/local/lib/mecab/dic/mecab-ipadic-neologd'];
+            $mt = new MeCab\Tagger($options);
+            $node = $mt->parseToNode($input);
+            $result = '';
+            foreach ($node as $n) {
+                $result .= $n->getStat() != 2 && $n->getStat() != 3 && mb_strpos($n->getFeature(), '人名') ? $n->getSurface() : false;
+            }
+            return $result;
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
-        return $result;
+
     }
 
 }
 
-class OnlyLoveYou extends main
+class OnlyLoveYou extends Main
 {
     /**
      * 送信者とメッセージ内容と解析した名前をデータベースに追加する
      *
-     * @param $usr
-     * @param $msgContent
-     * @return bool
+     * @param array $request
+     * @return void
      */
     public function create(array $request) {
 
         if ( $this->seiyuNameAnalysis($request['msg']) ) {
 
             try {
-
                 $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
                 $db = $this->getDb();
                 $tableName = 'only_love_you';
@@ -64,25 +70,26 @@ class OnlyLoveYou extends main
                 $stt->bindValue(':seiyuName', $voiceActorName);
                 $stt->bindValue(':guildName', $request['guild']);
                 $stt->execute();
-
             } catch(PDOException $e) {
+                echo "残念";
                 $db->rollBack();
                 die( $e->getMessage() );
             }
 
+        } else {
+            echo  $this->seiyuNameAnalysis($request['msg']);
         }
 
     }
 
 }
 
-class VoiceActorOwnership extends main
+class VoiceActorOwnership extends Main
 {
     /**
      * 声優の所有権の主張を検知して解析して保存する
      *
-     * @param $usr
-     * @param $msgContent
+     * @param array $request
      * @return bool|void
      */
     public function create(array $request) {
@@ -108,9 +115,16 @@ class VoiceActorOwnership extends main
     }
 }
 
-class OnlyYouWin extends main
+class OnlyYouWin extends Main
 {
+
+    /**
+     * 勝利宣言
+     *
+     * @param array $request
+     */
     public function create(array $request) {
+
         if ( $this->seiyuNameAnalysis($request['msg']) ) {
 
             try {
@@ -130,5 +144,7 @@ class OnlyYouWin extends main
             }
 
         }
+
     }
+
 }
