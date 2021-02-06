@@ -2,10 +2,13 @@
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/src/main.php');
 
-$conf = parse_ini_file(__DIR__ . '/config.ini', true);
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+$token = $_ENV['BOT_TOKEN'];
 
 $discord = new \Discord\Discord([
-    'token' => $conf['BOT']['TOKEN'],
+    'token' => $token,
 ]);
 
 $discord->on('ready', function ($discord) {

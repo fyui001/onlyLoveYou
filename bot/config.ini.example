@@ -1,8 +1,0 @@
-[BOT]
-TOKEN = hogehoge
-
-[DATABASE]
-HOST = localhost
-USER = root
-PASSWD = passwd
-DB_NAME = DATABASE
