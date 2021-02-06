@@ -1,10 +1,14 @@
 {
-    "name": "y/only-love-you",
+    "name": "only-love-you",
     "description": "お前しか好きじゃない",
     "type": "project",
     "require": {
-        "team-reflex/discord-php": "^4.0"
+        "team-reflex/discord-php": "^4.0",
+        "vlucas/phpdotenv": "^5.3"
     },
-    "require-dev": {
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        }
     }
 }
