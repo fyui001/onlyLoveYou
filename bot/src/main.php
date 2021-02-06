@@ -1,27 +1,10 @@
 <?php
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+use src\Database;
 
 class Main
 {
-    /**
-     * データベース接続
-     *
-     * @return PDO
-     */
-    protected function getDb() {
-
-        $conf = parse_ini_file(__DIR__ . '/../config.ini', true);
-
-        try{
-            $db = new PDO("mysql:dbname={$conf['DATABASE']['DB_NAME']}; host={$conf['DATABASE']['HOST']}; charset=utf8;", $conf['DATABASE']['USER'], $conf['DATABASE']['PASSWORD']);
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        } catch(PDOException $e) {
-            die("接続に失敗{$e->getMessage()}");
-        }
-
-        return $db;
-    }
-
     /**
      * 形態素解析で声優の名前を解析
      *
@@ -61,7 +44,8 @@ class OnlyLoveYou extends Main
 
             try {
                 $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
-                $db = $this->getDb();
+                $database = new Database();
+                $db = $database->getDb();
                 $tableName = 'only_love_you';
                 $sql = "INSERT INTO `{$tableName}` (user, content, love, guild) VALUES (:usr, :msgContent, :seiyuName, :guildName) ";
                 $stt = $db->prepare($sql);
@@ -96,7 +80,8 @@ class VoiceActorOwnership extends Main
 
         if ( $this->seiyuNameAnalysis($request['msg']) ) {
             try {
-                $db = $this->getDb();
+                $database = new Database();
+                $db = $database->getDb();
                 $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
                 $tableName = 'voice_actor_ownership';
                 $sql = "INSERT INTO `{$tableName}` (user, content, claim_ownership, guild) VALUES (:usr, :msgContent, :voiceActorName, :guildName )";
@@ -128,7 +113,8 @@ class OnlyYouWin extends Main
         if ( $this->seiyuNameAnalysis($request['msg']) ) {
 
             try {
-                $db = $this->getDb();
+                $database = new Database();
+                $db = $database->getDb();
                 $voiceActorName = $this->seiyuNameAnalysis($request['msg']);
                 $tableName = 'only_you_win';
                 $sql = "INSERT INTO `{$tableName}` (user, content, win, guild) VALUES (:usr, :msgContent, :voiceActorName, :guildName )";
