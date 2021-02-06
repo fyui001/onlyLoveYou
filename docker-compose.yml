@@ -5,7 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./bot:/root/bot
+      - .:/code
     tty: true
     restart: always
-
