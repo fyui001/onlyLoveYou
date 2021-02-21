@@ -18,7 +18,7 @@ class Database
 
         $host = $_ENV['DB_HOST'];
         $database = $_ENV['DB_DATABASE'];
-        $user = $_ENV['DB_USERNAME'];
+        $user = $_ENV['DB_USER'];
         $password = $_ENV['DB_PASSWORD'];
 
         $dsn = "mysql:host={$host};dbname={$database};charset=utf8mb4";
